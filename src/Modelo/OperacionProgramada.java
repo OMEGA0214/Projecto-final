@@ -1,4 +1,4 @@
-package Estructuras;
+package Modelo;
 
 import java.time.LocalDateTime;
 

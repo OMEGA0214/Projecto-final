@@ -1,4 +1,6 @@
-package Estructuras;
+package Modelo;
+
+import Estructuras.Lista;
 
 public class Billetera {
     public String codigo;

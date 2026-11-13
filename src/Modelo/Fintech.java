@@ -1,4 +1,9 @@
-package Estructuras;
+package Modelo;
+
+import Estructuras.ArbolUsuarios;
+import Estructuras.Cola;
+import Estructuras.ColaPrioridad;
+import Estructuras.Grafo;
 
 import java.util.HashMap;
 
@@ -13,5 +18,10 @@ public class Fintech {
 
     private ArbolUsuarios usuariosPorPuntos;
 
-    private GrafoTransferencias grafoTransferencias;
+    private Grafo grafoTransferencias;
+
+    public Fintech() {
+    }
+
+
 }

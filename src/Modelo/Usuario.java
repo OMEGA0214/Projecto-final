@@ -1,4 +1,7 @@
-package Estructuras;
+package Modelo;
+
+import Estructuras.Lista;
+import Estructuras.Pila;
 
 public class Usuario {
 
