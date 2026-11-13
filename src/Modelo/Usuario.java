@@ -53,6 +53,14 @@ public class Usuario {
         }
     }
 
+    public void quitarPuntos(int puntos) {
+        this.puntos -= puntos;
+        if (this.puntos < 0) {
+            this.puntos = 0;
+        }
+        actualizarNivelUsuario();
+    }
+
     public String getId() {
         return id;
     }

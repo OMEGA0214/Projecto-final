@@ -1,9 +1,6 @@
 package Modelo;
 
-import Estructuras.ArbolUsuarios;
-import Estructuras.Cola;
-import Estructuras.ColaPrioridad;
-import Estructuras.Grafo;
+import Estructuras.*;
 
 import java.util.HashMap;
 
@@ -66,14 +63,14 @@ public class Fintech {
             transaccion.setEstado((EstadoTransaccion.RECHAZADA));
 
         }
-        if(billetera != null) {
+        if (billetera != null) {
             billetera.agregarTransaccion(transaccion);
         }
 
     }
 
     public void transferir(String origen, String destino, double monto) {
-        if( origen.equals(destino)) {
+        if (origen.equals(destino)) {
             System.out.println("No se puede transferir a la misma billetera.");
             return;
         }
@@ -89,11 +86,48 @@ public class Fintech {
             System.out.println("Saldo insuficiente para realizar la transferencia.");
             transaccion.setEstado(EstadoTransaccion.RECHAZADA);
         }
-        if(billeteraOrigen != null) {
+        if (billeteraOrigen != null) {
             billeteraOrigen.agregarTransaccion(transaccion);
         }
-        if(billeteraDestino != null) {
-            billeteraDestino.agregarTransaccion(transaccion);        }
+        if (billeteraDestino != null) {
+            billeteraDestino.agregarTransaccion(transaccion);
+        }
+    }
+
+    public void revertirTransferencia(String idUsuario, String idTransaccion) {
+        Usuario usuario = buscarUsuario(idUsuario);
+        if (usuario == null) {
+            return;
+        }
+        Pila<Transaccion> aux = new Pila<>();
+        while (!usuario.getReversibles().isEmpty()) {
+            Transaccion t = usuario.getReversibles().pop();
+            if (t.getId().equals(idTransaccion)) {
+                if (t.getEstado() == EstadoTransaccion.EJECUTADA) {
+                    long dias = java.time.Duration.between(t.getFecha(), java.time.LocalDateTime.now()).toDays();
+                    if (dias <= 7) {
+                        Billetera billeteraOrigen = t.getBilleOrigen();
+                        Billetera billeteraDestino = t.getBilleDestino();
+                        double monto = t.getMonto();
+                        billeteraOrigen.setSaldo(billeteraOrigen.getSaldo() + monto);
+                        billeteraDestino.setSaldo(billeteraDestino.getSaldo() - monto);
+                        billeteraOrigen.getUsuario().quitarPuntos(t.getPuntosGanados());
+                        t.setEstado(EstadoTransaccion.REVERTIDA);
+                        break;
+                    } else {
+                        System.out.println("No se puede revertir la transacción, han pasado más de 7 días.");
+                        break;
+                    }
+                }
+                else{
+                    System.out.println("La transacción no se puede revertir ya que no fue valida");
+                }
+            }
+            aux.push(t);
+        }
+        while (!aux.isEmpty()) {
+            usuario.getReversibles().push(aux.pop());
+        }
     }
 
 }
