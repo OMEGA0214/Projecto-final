@@ -2,6 +2,7 @@ package Modelo;
 
 import Estructuras.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Fintech {
@@ -127,6 +128,35 @@ public class Fintech {
         }
         while (!aux.isEmpty()) {
             usuario.getReversibles().push(aux.pop());
+        }
+    }
+
+    public void programarOperacion(TipoTransaccion transaccion,double valor, Billetera origen, Billetera destino, LocalDateTime fecha) {
+        OperacionProgramada op = new OperacionProgramada(transaccion, valor, origen, destino, fecha);
+        operacionesProgramadas.encolar(op);
+    }
+
+    public void ejecutarOperacionesProgramadas() {
+        LocalDateTime ahora = LocalDateTime.now();
+        while (!operacionesProgramadas.estaVacia()) {
+            OperacionProgramada op = operacionesProgramadas.desencolar();
+            if (op.getFechaEjecucion().isBefore(ahora) || op.getFechaEjecucion().isEqual(ahora)) {
+                switch (op.getTipo()) {
+                    case RECARGA:
+                        recargar(op.getDestino().getCodigo(), op.getValor());
+                        break;
+                    case RETIRO:
+                        retirar(op.getOrigen().getCodigo(), op.getValor());
+                        break;
+                    case TRANSFERENCIA:
+                        transferir(op.getOrigen().getCodigo(), op.getDestino().getCodigo(), op.getValor());
+                        break;
+                }
+            } else {
+                operacionesProgramadas.encolar(op);
+                break;
+            }
+            op.setEjecutada(true);
         }
     }
 
