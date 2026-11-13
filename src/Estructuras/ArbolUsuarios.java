@@ -5,8 +5,8 @@ import Modelo.Usuario;
 public class ArbolUsuarios {
     public NodoArbol raiz;
 
-    public ArbolUsuarios(NodoArbol raiz) {
-        this.raiz = raiz;
+    public ArbolUsuarios() {
+        this.raiz = null;
     }
 
     public void insertar(Usuario usuario) {

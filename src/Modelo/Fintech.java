@@ -19,6 +19,22 @@ public class Fintech {
     private Grafo grafoTransferencias;
 
     public Fintech() {
+
+        usuarios = new HashMap<>();
+
+        billeteras = new HashMap<>();
+
+        operacionesProgramadas =
+                new ColaPrioridad();
+
+        notificaciones =
+                new Cola();
+
+        usuariosPorPuntos =
+                new ArbolUsuarios();
+
+        grafoTransferencias =
+                new Grafo();
     }
 
     public void registrarUsuario(Usuario usuario) {
@@ -158,6 +174,31 @@ public class Fintech {
             }
             op.setEjecutada(true);
         }
+    }
+
+    public void eliminarBilletera(String codigo) {
+
+        billeteras.remove(codigo);
+    }
+
+    public Lista<Transaccion> obtenerHistorialBilletera(String codigo){
+        Billetera billetera = buscarBilletera(codigo);
+        if (billetera != null) {
+            return billetera.getHistorial();
+        }
+        return new Lista<>();
+    }
+
+    public Lista<Notificacion> obtenerNotificaciones(String idUsuario){
+        Usuario usuario = buscarUsuario(idUsuario);
+        if (usuario != null) {
+            return usuario.getNotificaciones();
+        }
+        return new Lista<>();
+    }
+
+    public void mostrarRankingUsuarios(){
+        usuariosPorPuntos.inOrden();
     }
 
 }
