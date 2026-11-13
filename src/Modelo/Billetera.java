@@ -3,6 +3,7 @@ package Modelo;
 import Estructuras.Lista;
 
 public class Billetera {
+    public static int ids = 1;
     public String codigo;
     public String nombre;
     public TipoBilletera tipoBilletera;
@@ -11,8 +12,8 @@ public class Billetera {
     public Usuario usuario;
     public Lista<Transaccion> historial;
 
-    public Billetera(String codigo, String nombre, TipoBilletera tipoBilletera, Usuario usuario) {
-        this.codigo = codigo;
+    public Billetera( String nombre, TipoBilletera tipoBilletera, Usuario usuario) {
+        this.codigo = "B" + ids++;
         this.nombre = nombre;
         this.tipoBilletera = tipoBilletera;
 
@@ -22,6 +23,17 @@ public class Billetera {
         this.usuario = usuario;
 
         this.historial = new Lista<Transaccion>();
+    }
+
+    public void agregarTransaccion(Transaccion transaccion) {
+        historial.agregarFinal(transaccion);
+        if( transaccion.getEstado() == EstadoTransaccion.EJECUTADA ) {
+            usuario.agregarPuntos(transaccion.getPuntosGanados());
+            if(transaccion.getTipoTransaccion() == TipoTransaccion.TRANSFERENCIA) {
+                usuario.getReversibles().push(transaccion);
+            }
+        }
+        usuario.getReversibles().push(transaccion);
     }
 
     public String getCodigo() {

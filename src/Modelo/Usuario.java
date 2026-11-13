@@ -30,6 +30,29 @@ public class Usuario {
         this.reversibles = new Pila<>();
     }
 
+    public void agregarPuntos(int puntos) {
+        this.puntos += puntos;
+        actualizarNivelUsuario();
+    }
+
+    public void actualizarNivelUsuario() {
+        NivelUsuario actual = this.nivelUsuario;
+        if ( actual != NivelUsuario.PLATA && puntos > 500 && puntos <= 1000) {
+            nivelUsuario = NivelUsuario.PLATA;
+            Notificacion notificacion = new Notificacion("¡Felicidades! Has alcanzado el nivel PLATA.");
+            notificaciones.agregarFinal(notificacion);
+
+        } else if ( actual != NivelUsuario.ORO && puntos > 1000 && puntos <= 5000) {
+            nivelUsuario = NivelUsuario.ORO;
+            Notificacion notificacion = new Notificacion("¡Felicidades! Has alcanzado el nivel ORO.");
+            notificaciones.agregarFinal(notificacion);
+        } else if( actual != NivelUsuario.PLATINO && puntos >5000){
+            Notificacion notificacion = new Notificacion("¡Felicidades! Has alcanzado el nivel PLATINO.");
+            notificaciones.agregarFinal(notificacion);
+            nivelUsuario = NivelUsuario.PLATINO;
+        }
+    }
+
     public String getId() {
         return id;
     }
