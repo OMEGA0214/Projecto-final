@@ -12,62 +12,120 @@ public class PantallaInicio extends JFrame {
 
     public PantallaInicio(Fintech fintech) {
 
+        this.fintech = fintech;
 
         setTitle("Fintech");
-        setSize(700,400);
+        setSize(700, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        JPanel principal = new JPanel(new GridLayout(1,2));
+        JPanel principal =
+                new JPanel(
+                        new GridLayout(
+                                1,
+                                2,
+                                20,
+                                20));
 
         //---------------- REGISTRO ----------------
 
         JPanel registro = new JPanel();
-        registro.setLayout(new BoxLayout(registro,
-                BoxLayout.Y_AXIS));
+        registro.setLayout(
+                new BoxLayout(
+                        registro,
+                        BoxLayout.Y_AXIS));
 
         JLabel tituloRegistro =
                 new JLabel("Registro");
 
+        tituloRegistro.setAlignmentX(
+                Component.CENTER_ALIGNMENT);
+
         JTextField txtId =
-                new JTextField(15);
+                new JTextField();
 
         JTextField txtNombre =
-                new JTextField(15);
+                new JTextField();
 
         JTextField txtCorreo =
-                new JTextField(15);
+                new JTextField();
+
+        txtId.setMaximumSize(
+                new Dimension(220, 25));
+
+        txtNombre.setMaximumSize(
+                new Dimension(220, 25));
+
+        txtCorreo.setMaximumSize(
+                new Dimension(220, 25));
 
         JButton btnRegistrar =
                 new JButton("Registrar");
 
+        btnRegistrar.setAlignmentX(
+                Component.CENTER_ALIGNMENT);
+
+        registro.add(Box.createVerticalStrut(20));
+
         registro.add(tituloRegistro);
+
+        registro.add(Box.createVerticalStrut(15));
+
         registro.add(new JLabel("ID"));
         registro.add(txtId);
+
+        registro.add(Box.createVerticalStrut(10));
+
         registro.add(new JLabel("Nombre"));
         registro.add(txtNombre);
+
+        registro.add(Box.createVerticalStrut(10));
+
         registro.add(new JLabel("Correo"));
         registro.add(txtCorreo);
+
+        registro.add(Box.createVerticalStrut(15));
+
         registro.add(btnRegistrar);
 
         //---------------- LOGIN ----------------
 
         JPanel login = new JPanel();
-        login.setLayout(new BoxLayout(login,
-                BoxLayout.Y_AXIS));
+
+        login.setLayout(
+                new BoxLayout(
+                        login,
+                        BoxLayout.Y_AXIS));
 
         JLabel tituloLogin =
                 new JLabel("Ingresar");
 
+        tituloLogin.setAlignmentX(
+                Component.CENTER_ALIGNMENT);
+
         JTextField txtLogin =
-                new JTextField(15);
+                new JTextField();
+
+        txtLogin.setMaximumSize(
+                new Dimension(220, 25));
 
         JButton btnIngresar =
                 new JButton("Ingresar");
 
+        btnIngresar.setAlignmentX(
+                Component.CENTER_ALIGNMENT);
+
+        login.add(Box.createVerticalStrut(20));
+
         login.add(tituloLogin);
+
+        login.add(Box.createVerticalStrut(15));
+
         login.add(new JLabel("ID"));
         login.add(txtLogin);
+
+        login.add(Box.createVerticalStrut(15));
+
         login.add(btnIngresar);
 
         principal.add(registro);
@@ -79,12 +137,12 @@ public class PantallaInicio extends JFrame {
 
         btnRegistrar.addActionListener(e -> {
 
-            if(fintech.buscarUsuario(
-                    txtId.getText()) != null){
+            if (fintech.buscarUsuario(
+                    txtId.getText()) != null) {
 
                 JOptionPane.showMessageDialog(
                         this,
-                        "Usuario ya existe");
+                        "Ya existe un usuario con ese ID");
 
                 return;
             }
@@ -99,7 +157,7 @@ public class PantallaInicio extends JFrame {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Usuario registrado");
+                    "Usuario registrado correctamente");
         });
 
         btnIngresar.addActionListener(e -> {
@@ -108,7 +166,7 @@ public class PantallaInicio extends JFrame {
                     fintech.buscarUsuario(
                             txtLogin.getText());
 
-            if(usuario == null){
+            if (usuario == null) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -118,7 +176,8 @@ public class PantallaInicio extends JFrame {
             }
 
             new PanelUsuarios(
-                    fintech, usuario);
+                    fintech,
+                    usuario);
 
             dispose();
         });

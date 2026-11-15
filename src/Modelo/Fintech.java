@@ -82,55 +82,74 @@ public class Fintech {
 
     public void retirar(String codigoBilletera, double monto) {
         Billetera billetera = buscarBilletera(codigoBilletera);
+
+        if (billetera == null) {throw new IllegalArgumentException("La billetera no existe.");
+        }
+
         Transaccion transaccion = new Transaccion(TipoTransaccion.RETIRO, monto, billetera, null);
 
-        if (billetera != null && billetera.getSaldo() >= monto) {
+        if (billetera.getSaldo() >= monto) {
             billetera.setSaldo(billetera.getSaldo() - monto);
             transaccion.setEstado(EstadoTransaccion.EJECUTADA);
-            billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
         } else {
-            System.out.println("Saldo insuficiente para realizar el retiro.");
-            transaccion.setEstado((EstadoTransaccion.RECHAZADA));
-            billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
-
-        }
-        if (billetera != null) {
-            usuariosPorPuntos.eliminar(billetera.getUsuario());
+            transaccion.setEstado(EstadoTransaccion.RECHAZADA);
             billetera.agregarTransaccion(transaccion);
-            usuariosPorPuntos.insertar(billetera.getUsuario());
             billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
+            throw new IllegalArgumentException("Saldo insuficiente para realizar el retiro.");
         }
-
-
+        usuariosPorPuntos.eliminar(billetera.getUsuario());
+        billetera.agregarTransaccion(transaccion);
+        usuariosPorPuntos.insertar(billetera.getUsuario());
+        billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
     }
 
     public void transferir(String origen, String destino, double monto) {
-        if (origen.equals(destino)) {
-            System.out.println("No se puede transferir a la misma billetera.");
-            return;
-        }
+
         Billetera billeteraOrigen = buscarBilletera(origen);
+
+        if (origen.equals(destino)) {
+            if (billeteraOrigen != null) {
+                Transaccion transaccion =
+                        new Transaccion(TipoTransaccion.TRANSFERENCIA, monto, billeteraOrigen, billeteraOrigen);
+                transaccion.setEstado(EstadoTransaccion.RECHAZADA);
+                billeteraOrigen.agregarTransaccion(transaccion);
+                billeteraOrigen.getUsuario().getTransacciones().agregarFinal(transaccion);
+            }
+            throw new IllegalArgumentException("No se puede transferir a la misma billetera.");
+        }
+
         Billetera billeteraDestino = buscarBilletera(destino);
-        Transaccion transaccion = new Transaccion(TipoTransaccion.TRANSFERENCIA, monto, billeteraOrigen, billeteraDestino);
-        if (billeteraOrigen != null && billeteraDestino != null && billeteraOrigen.getSaldo() >= monto) {
-            billeteraOrigen.setSaldo(billeteraOrigen.getSaldo() - monto);
-            billeteraDestino.setSaldo(billeteraDestino.getSaldo() + monto);
-            transaccion.setEstado(EstadoTransaccion.EJECUTADA);
-            grafoTransferencias.agregarArista(billeteraOrigen.getUsuario(), billeteraDestino.getUsuario());
-        } else {
-            System.out.println("Saldo insuficiente para realizar la transferencia.");
+
+        if (billeteraDestino == null) {
+            if (billeteraOrigen != null) {
+                Transaccion transaccion = new Transaccion(TipoTransaccion.TRANSFERENCIA, monto, billeteraOrigen, null);
+                transaccion.setEstado(EstadoTransaccion.RECHAZADA);
+                billeteraOrigen.agregarTransaccion(transaccion);
+                billeteraOrigen.getUsuario().getTransacciones().agregarFinal(transaccion);
+            }
+            throw new IllegalArgumentException("La billetera de destino no existe.");
+        }
+        Transaccion transaccion = new Transaccion(TipoTransaccion.TRANSFERENCIA, monto,billeteraOrigen, billeteraDestino);
+        if (billeteraOrigen.getSaldo() < monto) {
             transaccion.setEstado(EstadoTransaccion.RECHAZADA);
-        }
-        if (billeteraOrigen != null) {
-            usuariosPorPuntos.eliminar(billeteraOrigen.getUsuario());
             billeteraOrigen.agregarTransaccion(transaccion);
-            usuariosPorPuntos.insertar(billeteraOrigen.getUsuario());
             billeteraOrigen.getUsuario().getTransacciones().agregarFinal(transaccion);
-        }
-        if (billeteraDestino != null) {
             billeteraDestino.agregarTransaccion(transaccion);
             billeteraDestino.getUsuario().getTransacciones().agregarFinal(transaccion);
+            throw new IllegalArgumentException("Saldo insuficiente para realizar la transferencia.");
         }
+        billeteraOrigen.setSaldo(billeteraOrigen.getSaldo() - monto);
+        billeteraDestino.setSaldo(billeteraDestino.getSaldo() + monto);
+        transaccion.setEstado(EstadoTransaccion.EJECUTADA);
+        grafoTransferencias.agregarArista(billeteraOrigen.getUsuario(), billeteraDestino.getUsuario());
+
+        usuariosPorPuntos.eliminar(billeteraOrigen.getUsuario());
+        billeteraOrigen.agregarTransaccion(transaccion);
+        usuariosPorPuntos.insertar(billeteraOrigen.getUsuario());
+        billeteraDestino.agregarTransaccion(transaccion);
+
+        billeteraOrigen.getUsuario().getTransacciones().agregarFinal(transaccion);
+        billeteraDestino.getUsuario().getTransacciones().agregarFinal(transaccion);
     }
 
     public void revertirTransferencia(String idUsuario, String idTransaccion) {

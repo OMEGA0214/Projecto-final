@@ -11,6 +11,11 @@ public class PanelOperaciones extends JPanel {
             Fintech fintech,
             Usuario usuario) {
 
+        setLayout(new FlowLayout(
+                FlowLayout.CENTER,
+                20,
+                20));
+
         JButton recarga =
                 new JButton("Recarga");
 
@@ -20,158 +25,186 @@ public class PanelOperaciones extends JPanel {
         JButton transferencia =
                 new JButton("Transferencia");
 
-        setLayout(new FlowLayout(
-                FlowLayout.CENTER,
-                20,
-                20));
         add(recarga);
         add(retiro);
         add(transferencia);
 
-
         recarga.addActionListener(e -> {
 
-            JComboBox<Billetera> destino =
-                    new JComboBox<>();
+            try {
 
-            for(int i=0;
-                i<usuario.getBilleteras().getSize();
-                i++){
+                JComboBox<Billetera> destino =
+                        new JComboBox<>();
 
-                destino.addItem(
-                        usuario.getBilleteras()
-                                .obtener(i));
-            }
+                for(int i = 0;
+                    i < usuario.getBilleteras().getSize();
+                    i++) {
 
-            JTextField monto =
-                    new JTextField();
+                    destino.addItem(
+                            usuario.getBilleteras()
+                                    .obtener(i));
+                }
 
-            Object[] campos = {
+                JTextField monto =
+                        new JTextField();
 
-                    "Destino",
-                    destino,
+                Object[] campos = {
 
-                    "Monto",
-                    monto
-            };
+                        "Destino",
+                        destino,
 
-            if(JOptionPane.showConfirmDialog(
-                    this,
-                    campos,
-                    "Recarga",
-                    JOptionPane.OK_CANCEL_OPTION)
+                        "Monto",
+                        monto
+                };
 
-                    == JOptionPane.OK_OPTION){
+                int opcion =
+                        JOptionPane.showConfirmDialog(
+                                this,
+                                campos,
+                                "Recarga",
+                                JOptionPane.OK_CANCEL_OPTION);
 
-                fintech.recargar(
+                if(opcion == JOptionPane.OK_OPTION){
 
-                        ((Billetera)
-                                destino
-                                        .getSelectedItem())
-                                .getCodigo(),
+                    fintech.recargar(
 
-                        Double.parseDouble(
-                                monto.getText()));
+                            ((Billetera)
+                                    destino.getSelectedItem())
+                                    .getCodigo(),
+
+                            Double.parseDouble(
+                                    monto.getText()));
+                }
+
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
         retiro.addActionListener(e -> {
 
-            JComboBox<Billetera> origen =
-                    new JComboBox<>();
+            try {
 
-            for(int i=0;
-                i<usuario.getBilleteras().getSize();
-                i++){
+                JComboBox<Billetera> origen =
+                        new JComboBox<>();
 
-                origen.addItem(
-                        usuario.getBilleteras()
-                                .obtener(i));
-            }
+                for(int i = 0;
+                    i < usuario.getBilleteras().getSize();
+                    i++) {
 
-            JTextField monto =
-                    new JTextField();
+                    origen.addItem(
+                            usuario.getBilleteras()
+                                    .obtener(i));
+                }
 
-            Object[] campos = {
+                JTextField monto =
+                        new JTextField();
 
-                    "Origen",
-                    origen,
+                Object[] campos = {
 
-                    "Monto",
-                    monto
-            };
+                        "Origen",
+                        origen,
 
-            if(JOptionPane.showConfirmDialog(
-                    this,
-                    campos,
-                    "Retiro",
-                    JOptionPane.OK_CANCEL_OPTION)
+                        "Monto",
+                        monto
+                };
 
-                    == JOptionPane.OK_OPTION){
+                int opcion =
+                        JOptionPane.showConfirmDialog(
+                                this,
+                                campos,
+                                "Retiro",
+                                JOptionPane.OK_CANCEL_OPTION);
 
-                fintech.retirar(
+                if(opcion == JOptionPane.OK_OPTION){
 
-                        ((Billetera)
-                                origen
-                                        .getSelectedItem())
-                                .getCodigo(),
+                    fintech.retirar(
 
-                        Double.parseDouble(
-                                monto.getText()));
+                            ((Billetera)
+                                    origen.getSelectedItem())
+                                    .getCodigo(),
+
+                            Double.parseDouble(
+                                    monto.getText()));
+                }
+
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
         transferencia.addActionListener(e -> {
 
-            JComboBox<Billetera> origen =
-                    new JComboBox<>();
+            try {
 
-            for(int i=0;
-                i<usuario.getBilleteras().getSize();
-                i++){
+                JComboBox<Billetera> origen =
+                        new JComboBox<>();
 
-                origen.addItem(
-                        usuario.getBilleteras()
-                                .obtener(i));
-            }
+                for(int i = 0;
+                    i < usuario.getBilleteras().getSize();
+                    i++) {
 
-            JTextField destino =
-                    new JTextField();
+                    origen.addItem(
+                            usuario.getBilleteras()
+                                    .obtener(i));
+                }
 
-            JTextField monto =
-                    new JTextField();
+                JTextField destino =
+                        new JTextField();
 
-            Object[] campos = {
+                JTextField monto =
+                        new JTextField();
 
-                    "Origen",
-                    origen,
+                Object[] campos = {
 
-                    "Destino",
-                    destino,
+                        "Origen",
+                        origen,
 
-                    "Monto",
-                    monto
-            };
+                        "Destino",
+                        destino,
 
-            if(JOptionPane.showConfirmDialog(
-                    this,
-                    campos,
-                    "Transferencia",
-                    JOptionPane.OK_CANCEL_OPTION)
+                        "Monto",
+                        monto
+                };
 
-                    == JOptionPane.OK_OPTION){
+                int opcion =
+                        JOptionPane.showConfirmDialog(
+                                this,
+                                campos,
+                                "Transferencia",
+                                JOptionPane.OK_CANCEL_OPTION);
 
-                fintech.transferir(
+                if(opcion == JOptionPane.OK_OPTION){
 
-                        ((Billetera)
-                                origen
-                                        .getSelectedItem())
-                                .getCodigo(),
+                    fintech.transferir(
 
-                        destino.getText(),
+                            ((Billetera)
+                                    origen.getSelectedItem())
+                                    .getCodigo(),
 
-                        Double.parseDouble(
-                                monto.getText()));
+                            destino.getText(),
+
+                            Double.parseDouble(
+                                    monto.getText()));
+                }
+
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
     }
