@@ -36,4 +36,9 @@ public class Notificacion {
     public void setLeida(boolean leida) {
         this.leida = leida;
     }
+
+    @Override
+    public String toString() {
+        return fecha + " - " + mensaje;
+    }
 }

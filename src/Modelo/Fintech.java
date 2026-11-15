@@ -38,7 +38,16 @@ public class Fintech {
     }
 
     public void registrarUsuario(Usuario usuario) {
+        if(usuarios.containsKey(usuario.getId())) {
+
+            System.out.println(
+                    "Ya existe un usuario con ese ID");
+
+            return;
+        }
+
         usuarios.put(usuario.getId(), usuario);
+
         usuariosPorPuntos.insertar(usuario);
     }
 
@@ -67,6 +76,7 @@ public class Fintech {
             usuariosPorPuntos.eliminar(billetera.getUsuario());
             billetera.agregarTransaccion(transaccion);
             usuariosPorPuntos.insertar(billetera.getUsuario());
+            billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
         }
     }
 
@@ -77,16 +87,20 @@ public class Fintech {
         if (billetera != null && billetera.getSaldo() >= monto) {
             billetera.setSaldo(billetera.getSaldo() - monto);
             transaccion.setEstado(EstadoTransaccion.EJECUTADA);
+            billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
         } else {
             System.out.println("Saldo insuficiente para realizar el retiro.");
             transaccion.setEstado((EstadoTransaccion.RECHAZADA));
+            billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
 
         }
         if (billetera != null) {
             usuariosPorPuntos.eliminar(billetera.getUsuario());
             billetera.agregarTransaccion(transaccion);
             usuariosPorPuntos.insertar(billetera.getUsuario());
+            billetera.getUsuario().getTransacciones().agregarFinal(transaccion);
         }
+
 
     }
 
@@ -111,9 +125,11 @@ public class Fintech {
             usuariosPorPuntos.eliminar(billeteraOrigen.getUsuario());
             billeteraOrigen.agregarTransaccion(transaccion);
             usuariosPorPuntos.insertar(billeteraOrigen.getUsuario());
+            billeteraOrigen.getUsuario().getTransacciones().agregarFinal(transaccion);
         }
         if (billeteraDestino != null) {
             billeteraDestino.agregarTransaccion(transaccion);
+            billeteraDestino.getUsuario().getTransacciones().agregarFinal(transaccion);
         }
     }
 

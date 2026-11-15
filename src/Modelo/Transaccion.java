@@ -114,4 +114,15 @@ public class Transaccion {
         this.puntosGanados = puntosGanados;
     }
 
+    @Override
+    public String toString() {
+
+        return id
+                + " - "
+                + tipoTransaccion
+                + " - $"
+                + monto
+                + " - "
+                + estado;
+    }
 }

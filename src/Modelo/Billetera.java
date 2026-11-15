@@ -33,7 +33,7 @@ public class Billetera {
                 usuario.getReversibles().push(transaccion);
             }
         }
-        usuario.getReversibles().push(transaccion);
+
     }
 
     public String getCodigo() {
@@ -90,5 +90,16 @@ public class Billetera {
 
     public void setHistorial(Lista<Transaccion> historial) {
         this.historial = historial;
+    }
+
+    @Override
+    public String toString() {
+        return codigo
+                + " - "
+                + nombre
+                + " - "
+                + tipoBilletera
+                + " - $"
+                + saldo;
     }
 }

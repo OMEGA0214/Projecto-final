@@ -1,17 +1,13 @@
 import Estructuras.Lista;
 import Modelo.*;
+import Vista.PantallaInicio;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class Main {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(
-                VentanaPrincipal::new);
-
-
         Fintech fintech = new Fintech();
 
         Usuario u1 = new Usuario(
@@ -45,97 +41,100 @@ public class Main {
         u1.getBilleteras().agregarFinal(b1);
         u2.getBilleteras().agregarFinal(b2);
 
-        // Recarga
+        SwingUtilities.invokeLater(() ->
+                new PantallaInicio(fintech));
 
-        fintech.recargar("B1", 100000);
-
-        System.out.println(
-                "Saldo David tras recarga: "
-                        + b1.getSaldo());
-
-        // Transferencia
-
-        fintech.transferir(
-                "B1",
-                "B2",
-                30000);
-
-        System.out.println(
-                "Saldo David tras transferencia: "
-                        + b1.getSaldo());
-
-        System.out.println(
-                "Saldo Ana tras transferencia: "
-                        + b2.getSaldo());
-
-        // Historial
-
-        System.out.println(
-                "\nHistorial David:");
-
-        Lista<Transaccion> historial =
-                fintech.obtenerHistorialBilletera("B1");
-
-        for (int i = 0; i < historial.getSize(); i++) {
-
-            Transaccion t = historial.obtener(i);
-
-            System.out.println(
-                    t.getId() + " - "
-                            + t.getTipoTransaccion()
-                            + " - "
-                            + t.getMonto()
-                            + " - "
-                            + t.getEstado());
-        }
-
-        // Reversión
-
-        String idTransaccion =
-                historial.obtener(1).getId();
-
-        fintech.revertirTransferencia(
-                "101",
-                idTransaccion);
-
-        System.out.println(
-                "\nDespués de revertir:");
-
-        System.out.println(
-                "Saldo David: "
-                        + b1.getSaldo());
-
-        System.out.println(
-                "Saldo Ana: "
-                        + b2.getSaldo());
-
-        // Notificaciones
-
-        System.out.println(
-                "\nNotificaciones David:");
-
-        Lista<Notificacion> notificaciones =
-                fintech.obtenerNotificaciones("101");
-
-        for (int i = 0; i < notificaciones.getSize(); i++) {
-            System.out.println(
-                    notificaciones.obtener(i).getMensaje());
-        }
-
-        // Operación programada
-
-        fintech.programarOperacion(
-                TipoTransaccion.RECARGA,
-                50000,
-                null,
-                b1,
-                LocalDateTime.now().minusMinutes(1));
-
-        fintech.ejecutarOperacionesProgramadas();
-
-        System.out.println(
-                "\nSaldo David tras operación programada: "
-                        + b1.getSaldo());
+//        // Recarga
+//
+//        fintech.recargar("B1", 100000);
+//
+//        System.out.println(
+//                "Saldo David tras recarga: "
+//                        + b1.getSaldo());
+//
+//        // Transferencia
+//
+//        fintech.transferir(
+//                "B1",
+//                "B2",
+//                30000);
+//
+//        System.out.println(
+//                "Saldo David tras transferencia: "
+//                        + b1.getSaldo());
+//
+//        System.out.println(
+//                "Saldo Ana tras transferencia: "
+//                        + b2.getSaldo());
+//
+//        // Historial
+//
+//        System.out.println(
+//                "\nHistorial David:");
+//
+//        Lista<Transaccion> historial =
+//                fintech.obtenerHistorialBilletera("B1");
+//
+//        for (int i = 0; i < historial.getSize(); i++) {
+//
+//            Transaccion t = historial.obtener(i);
+//
+//            System.out.println(
+//                    t.getId() + " - "
+//                            + t.getTipoTransaccion()
+//                            + " - "
+//                            + t.getMonto()
+//                            + " - "
+//                            + t.getEstado());
+//        }
+//
+//        // Reversión
+//
+//        String idTransaccion =
+//                historial.obtener(1).getId();
+//
+//        fintech.revertirTransferencia(
+//                "101",
+//                idTransaccion);
+//
+//        System.out.println(
+//                "\nDespués de revertir:");
+//
+//        System.out.println(
+//                "Saldo David: "
+//                        + b1.getSaldo());
+//
+//        System.out.println(
+//                "Saldo Ana: "
+//                        + b2.getSaldo());
+//
+//        // Notificaciones
+//
+//        System.out.println(
+//                "\nNotificaciones David:");
+//
+//        Lista<Notificacion> notificaciones =
+//                fintech.obtenerNotificaciones("101");
+//
+//        for (int i = 0; i < notificaciones.getSize(); i++) {
+//            System.out.println(
+//                    notificaciones.obtener(i).getMensaje());
+//        }
+//
+//        // Operación programada
+//
+//        fintech.programarOperacion(
+//                TipoTransaccion.RECARGA,
+//                50000,
+//                null,
+//                b1,
+//                LocalDateTime.now().minusMinutes(1));
+//
+//        fintech.ejecutarOperacionesProgramadas();
+//
+//        System.out.println(
+//                "\nSaldo David tras operación programada: "
+//                        + b1.getSaldo());
 
     }
 }
