@@ -70,6 +70,40 @@ public class ArbolUsuarios {
         }
     }
 
+    public void eliminar(Usuario dato){
+        raiz = eliminarRecursivo(raiz, dato);
+    }
+
+    private NodoArbol eliminarRecursivo(NodoArbol raiz, Usuario dato) {
+        if (raiz == null) {
+            return null;
+        }
+
+        if (dato.getPuntos() < raiz.getDato().getPuntos()) {
+            raiz.setIzquierdo(eliminarRecursivo(raiz.getIzquierdo(), dato));
+        } else if (dato.getPuntos() > raiz.getDato().getPuntos()) {
+            raiz.setDerecho(eliminarRecursivo(raiz.getDerecho(), dato));
+        } else {
+            if (raiz.getIzquierdo() == null) {
+                return raiz.getDerecho();
+            } else if (raiz.getDerecho() == null) {
+                return raiz.getIzquierdo();
+            }
+            NodoArbol sucesor = obtenerSucesorInorder(raiz.getDerecho());
+            raiz.setDato(sucesor.getDato());
+            raiz.setDerecho(eliminarRecursivo(raiz.getDerecho(), sucesor.getDato()));
+        }
+        return raiz;
+    }
+
+    private NodoArbol obtenerSucesorInorder(NodoArbol nodo) {
+        NodoArbol actual = nodo;
+        while (actual.getIzquierdo() != null) {
+            actual = actual.getIzquierdo();
+        }
+        return actual;
+    }
+
     public NodoArbol getRaiz() {
         return raiz;
     }

@@ -52,6 +52,7 @@ public class Fintech {
 
     public void registrarBilletera(Billetera billetera) {
         billeteras.put(billetera.getCodigo(), billetera);
+        billetera.getUsuario().getBilleteras().agregarFinal(billetera);
     }
 
     public Billetera buscarBilletera(String codigo) {
@@ -63,8 +64,9 @@ public class Fintech {
         if (billetera != null) {
             billetera.setSaldo(billetera.getSaldo() + monto);
             Transaccion transaccion = new Transaccion(TipoTransaccion.RECARGA, monto, null, billetera);
+            usuariosPorPuntos.eliminar(billetera.getUsuario());
             billetera.agregarTransaccion(transaccion);
-
+            usuariosPorPuntos.insertar(billetera.getUsuario());
         }
     }
 
@@ -81,7 +83,9 @@ public class Fintech {
 
         }
         if (billetera != null) {
+            usuariosPorPuntos.eliminar(billetera.getUsuario());
             billetera.agregarTransaccion(transaccion);
+            usuariosPorPuntos.insertar(billetera.getUsuario());
         }
 
     }
@@ -104,7 +108,9 @@ public class Fintech {
             transaccion.setEstado(EstadoTransaccion.RECHAZADA);
         }
         if (billeteraOrigen != null) {
+            usuariosPorPuntos.eliminar(billeteraOrigen.getUsuario());
             billeteraOrigen.agregarTransaccion(transaccion);
+            usuariosPorPuntos.insertar(billeteraOrigen.getUsuario());
         }
         if (billeteraDestino != null) {
             billeteraDestino.agregarTransaccion(transaccion);
@@ -177,8 +183,12 @@ public class Fintech {
     }
 
     public void eliminarBilletera(String codigo) {
-
+        Billetera billetera = buscarBilletera(codigo);
         billeteras.remove(codigo);
+        if (billetera != null) {
+            billetera.getUsuario().getBilleteras().eliminar(billetera);
+        }
+
     }
 
     public Lista<Transaccion> obtenerHistorialBilletera(String codigo){
@@ -201,4 +211,35 @@ public class Fintech {
         usuariosPorPuntos.inOrden();
     }
 
+    public void crearBilletera(String nombre, TipoBilletera tipo, String idUsuario){
+        Usuario usuario = buscarUsuario(idUsuario);
+        if (usuario != null) {
+            Billetera billetera = new Billetera(nombre, tipo, usuario);
+            registrarBilletera(billetera);
+        }
+    }
+
+    public HashMap<String, Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public HashMap<String, Billetera> getBilleteras() {
+        return billeteras;
+    }
+
+    public ColaPrioridad getOperacionesProgramadas() {
+        return operacionesProgramadas;
+    }
+
+    public Cola getNotificaciones() {
+        return notificaciones;
+    }
+
+    public ArbolUsuarios getUsuariosPorPuntos() {
+        return usuariosPorPuntos;
+    }
+
+    public Grafo getGrafoTransferencias() {
+        return grafoTransferencias;
+    }
 }

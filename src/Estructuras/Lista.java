@@ -116,7 +116,7 @@ public class Lista<T> {
         return fin.getDato();
     }
 
-    public T buscar (T dato) {
+    public T buscar(T dato) {
         Nodo<T> actual = inicio;
         while (actual != null) {
             if (actual.getDato().equals(dato)) {
@@ -126,6 +126,7 @@ public class Lista<T> {
         }
         return null;
     }
+
     public Nodo<T> getInicio() {
         return inicio;
     }
@@ -150,5 +151,27 @@ public class Lista<T> {
         this.size = size;
     }
 
+
+    public void eliminar(T dato) {
+        if (inicio == null) {
+            return;
+        }
+        if (inicio.getDato().equals(dato)) {
+            eliminarInicio();
+            return;
+        }
+        Nodo<T> actual = inicio;
+        while (actual.getSiguiente() != null) {
+            if (actual.getSiguiente().getDato().equals(dato)) {
+                actual.setSiguiente(actual.getSiguiente().getSiguiente());
+                size--;
+                if (actual.getSiguiente() == null) {
+                    fin = actual;
+                }
+                return;
+            }
+            actual = actual.getSiguiente();
+        }
+    }
 
 }
