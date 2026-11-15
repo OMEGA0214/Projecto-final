@@ -119,9 +119,17 @@ public class Transaccion {
 
         return id
                 + " - "
+                + fecha
+                + " - "
                 + tipoTransaccion
                 + " - $"
                 + monto
+                + " - "
+                + billeOrigen.getCodigo()
+                + " - "
+                + billeDestino.getCodigo()
+                + " - "
+                + puntosGanados
                 + " - "
                 + estado;
     }
