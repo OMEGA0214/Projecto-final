@@ -16,6 +16,10 @@ public class PanelConsultas extends JPanel {
         JTextArea area = new JTextArea();
         area.setEditable(false);
 
+        JButton btnRanking =
+                new JButton(
+                        "Ver Ranking");
+
         JButton btnNotificaciones =
                 new JButton(
                         "Ver Notificaciones");
@@ -33,6 +37,7 @@ public class PanelConsultas extends JPanel {
 
         panelBotones.add(btnNotificaciones);
         panelBotones.add(btnHistorial);
+        panelBotones.add(btnRanking);
 
         btnNotificaciones.addActionListener(e -> {
 
@@ -108,6 +113,11 @@ public class PanelConsultas extends JPanel {
 
                 area.append("\n");
             }
+        });
+        btnRanking.addActionListener(e -> {
+
+            area.setText(
+                    fintech.mostrarRankingUsuarios());
         });
 
         add(panelBotones,

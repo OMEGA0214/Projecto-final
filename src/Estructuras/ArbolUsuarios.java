@@ -51,22 +51,28 @@ public class ArbolUsuarios {
         }
     }
 
-    public void inOrden() {
-        inOrdenRecursivo(raiz);
+    public String obtenerRanking() {
+
+        StringBuilder sb = new StringBuilder();
+
+        inOrdenRecursivo(raiz, sb);
+
+        return sb.toString();
     }
 
-    private void inOrdenRecursivo(NodoArbol nodo) {
+    private void inOrdenRecursivo(
+            NodoArbol nodo,
+            StringBuilder sb) {
 
         if (nodo != null) {
 
-            inOrdenRecursivo(nodo.getIzquierdo());
+            inOrdenRecursivo(nodo.getIzquierdo(), sb);
 
-            System.out.println(
-                    nodo.getDato().getNombre()
-                            + " - "
-                            + nodo.getDato().getPuntos());
+            Usuario usuario = nodo.getDato();
 
-            inOrdenRecursivo(nodo.getDerecho());
+            sb.append(usuario.getNombre()).append(" - ").append(usuario.getPuntos()).append(" puntos\n");
+
+            inOrdenRecursivo(nodo.getDerecho(),sb);
         }
     }
 

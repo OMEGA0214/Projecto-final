@@ -242,8 +242,8 @@ public class Fintech {
         return new Lista<>();
     }
 
-    public void mostrarRankingUsuarios(){
-        usuariosPorPuntos.inOrden();
+    public String mostrarRankingUsuarios(){
+        return usuariosPorPuntos.obtenerRanking();
     }
 
     public void crearBilletera(String nombre, TipoBilletera tipo, String idUsuario){
